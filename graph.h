@@ -1,8 +1,9 @@
-#ifndef GRAPH_H
+﻿#ifndef GRAPH_H
 #define GRAPH_H
 
 #include <iostream>
 #include <list>
+#include <vector>
 #include <fstream>
 
 using namespace std;
@@ -11,14 +12,15 @@ class Graph
 {
     int numVertices;
     list<int>* adjLists;
+
     int start;
     int dc;
 
+    vector<int> flag; // (0, 1, 2)
+    vector<int> cycles;
+    int cycles_counter = 0;
+
 public:
-    void addEdge(int src, int dest)
-    {
-        adjLists[src].push_front(dest);
-    }
     void start_and_dc(string file) {
         ifstream filein(file);
         char tmp[3] = "0";
@@ -51,20 +53,81 @@ public:
                         j++;
                         while (j < 30) {
                             if ((buff_size[j] != ' ') && buff_size[j] >= '0' && buff_size[j] <= '9') {
-                                adjLists[src].push_front(atoi(&buff_size[j]));
+                                adjLists[src].push_back(atoi(&buff_size[j]));
                             }
                             j++;
                         }
                     }
                 }
             }
+            flag.resize(numVertices);
             filein.close();
-            for (auto v : *adjLists)
-                std::cout << v << "\n";
         }
         else {
             cout << "\n File error.";
         }
+    }
+
+    friend ostream& operator << (ostream& os, Graph& graphy) {
+        os << "\n";
+        for (int q = 0; q < graphy.numVertices; q++) {
+            os << " " << q << " ->";
+            for (auto v : graphy.adjLists[q])
+                os << " " << v;
+            os << "\n";
+        }
+        return os;
+    }
+
+    void retrieve(int curr) {
+        for (auto u : adjLists[curr]) {
+            if (u == 0) {
+                cout << u;
+                return;
+            }
+            if (flag[u] == 1) {
+                cout << u;
+                retrieve(u);
+            }
+        }
+    }
+
+    void find_cycles(int curr) {
+        cycles.push_back(curr);
+
+        flag[curr] = 1;
+        for (auto u : adjLists[curr]) {
+            if (flag[u] == 0) {
+                find_cycles(u);
+            }
+            if (flag[u] == 1) {
+                cout << "\n  " << ++cycles_counter << ". ";
+                for (int i : cycles)
+                    cout << i;
+
+                cout << u;
+                if (u != 0) {
+                    retrieve(u);
+                }
+            }
+            for (int i : cycles)
+                i = 0;
+
+            if (curr == 0) {
+                cycles.clear();
+                cycles.push_back(0);
+
+                for (int i = 0; i < flag.size(); i++)
+                    flag[i] = 0;
+                flag[0] = 1;
+            }
+        }
+        //cout << "\n Blacklisted " << curr;
+        flag[curr] = 3;
+    }
+
+    int get_start() {
+        return start;
     }
 };
 
