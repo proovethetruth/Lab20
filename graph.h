@@ -81,13 +81,14 @@ public:
 
     void retrieve(int curr) {
         for (auto u : adjLists[curr]) {
-            if (u == 0) {
+            if (u == start) {
                 cout << u;
                 return;
             }
             if (flag[u] == 1) {
                 cout << u;
                 retrieve(u);
+                return;
             }
         }
     }
@@ -106,16 +107,16 @@ public:
                     cout << i;
 
                 cout << u;
-                if (u != 0) {
+                if (u != start) {
                     retrieve(u);
                 }
             }
             for (int i : cycles)
                 i = 0;
 
-            if (curr == 0) {
+            if (curr == start) {
                 cycles.clear();
-                cycles.push_back(0);
+                cycles.push_back(start);
 
                 for (int i = 0; i < flag.size(); i++)
                     flag[i] = 0;
