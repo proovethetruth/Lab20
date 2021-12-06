@@ -1,5 +1,5 @@
 dc = 3
-start point = 2
+start point = 0
 Graph[4]: 
 0 : 1 2 3
 1 : 0 2
