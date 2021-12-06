@@ -1,5 +1,5 @@
-dc = 9
-start point = 2
+dc = 5
+start point = 0
 Graph[6]:
 0 : 1 2 3
 1 : 0 2

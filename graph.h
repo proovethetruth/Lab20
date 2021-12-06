@@ -129,7 +129,6 @@ public:
         if (u == d) {
             for (int i = 1; i < path_index; i++)
                 cout << path[i];
-            cout << " HERE ";
             return;
         }
         else {
