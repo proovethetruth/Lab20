@@ -85,17 +85,17 @@ public:
                 cout << u;
                 return;
             }
-            if (flag[u] == 1) {
-                cout << u;
-                retrieve(u);
-                return;
-            }
+        }
+        if (flag[curr] == 1) {
+            cout << curr;
+            retrieve(curr);
+            return;
         }
     }
 
     void find_cycles(int curr) {
         cycles.push_back(curr);
-
+        cout << "\n Entered " << curr;
         flag[curr] = 1;
         for (auto u : adjLists[curr]) {
             if (flag[u] == 0) {
@@ -115,6 +115,7 @@ public:
                 i = 0;
 
             if (curr == start) {
+                cout << "\n Clearing flags " << curr;
                 cycles.clear();
                 cycles.push_back(start);
 
@@ -123,7 +124,7 @@ public:
                 flag[0] = 1;
             }
         }
-        //cout << "\n Blacklisted " << curr;
+        cout << "\n Blacklisted " << curr;
         flag[curr] = 3;
     }
 
