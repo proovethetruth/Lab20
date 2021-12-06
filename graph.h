@@ -80,23 +80,30 @@ public:
     }
 
     void find_cycles(int curr) {
-        std::cout << "\n Entered " << curr;
+        cycles.push_back(curr);
         flag[curr] = 1;
         for (auto u : adjLists[curr]) {
-            if (flag[u] == 1)
-                std::cout << "\n I FOUND IT with " << u;
+            if (flag[u] == 1 && ((cycles.size() + 1) < dc)) {
+                std::cout << "\n ";
+                for (int i : cycles)
+                    std::cout << i;
+                std::cout << u;
+            }
 
             if (flag[u] == 0)
                 find_cycles(u);
 
             if (curr == get_start()) {
-                std::cout << "\n\n Resetting flags \n";
                 for (int i = 0; i < flag.size(); i++)
                     flag[i] = 0;
                 flag[start] = 1;
+
+                for (int i = 0; i < cycles.size(); i++)
+                    cycles[i] = 0;
+                cycles[0] = start;
             }
         }
-        std::cout << "\n Closed " << curr;
+        cycles.pop_back();
         flag[curr] = 2;
     }
 

@@ -1,4 +1,4 @@
-dc = 3
+dc = 4
 start point = 0
 Graph[4]: 
 0 : 1 2 3
