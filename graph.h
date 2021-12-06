@@ -66,6 +66,8 @@ public:
         else {
             cout << "\n File error.";
         }
+        std::cout << "\n DC: " << dc;
+        std::cout << "\n Starting from: " << start;
     }
 
     friend ostream& operator << (ostream& os, Graph& graphy) {
@@ -83,28 +85,61 @@ public:
         cycles.push_back(curr);
         flag[curr] = 1;
         for (auto u : adjLists[curr]) {
-            if (flag[u] == 1 && ((cycles.size() + 1) < dc)) {
+            if (flag[u] == 1 && ((int)(cycles.size() + 1) < dc)) {
                 std::cout << "\n ";
                 for (int i : cycles)
                     std::cout << i;
-                std::cout << u;
+                printAllPaths(curr, start);
             }
 
             if (flag[u] == 0)
                 find_cycles(u);
 
-            if (curr == get_start()) {
-                for (int i = 0; i < flag.size(); i++)
+            if (curr == start) {
+                for (int i = 0; i < (int)flag.size(); i++)
                     flag[i] = 0;
                 flag[start] = 1;
 
-                for (int i = 0; i < cycles.size(); i++)
+                for (int i = 0; i < (int)cycles.size(); i++)
                     cycles[i] = 0;
                 cycles[0] = start;
             }
         }
         cycles.pop_back();
         flag[curr] = 2;
+    }
+
+    void printAllPaths(int s, int d) {
+        bool* visited = new bool[flag.size()];
+        int* path = new int[numVertices];
+        int path_index = 0;
+
+        for (int i = 0; i < numVertices; i++)
+            visited[i] = false;
+
+        printAllPathsUtil(s, d, visited, path, path_index);
+    }
+
+    void printAllPathsUtil(int u, int d, bool visited[],
+        int path[], int& path_index) {
+        visited[u] = true;
+        path[path_index] = u;
+        path_index++;
+
+        if (u == d) {
+            for (int i = 1; i < path_index; i++)
+                cout << path[i];
+            cout << " HERE ";
+            return;
+        }
+        else {
+            list<int>::iterator i;
+            for (i = adjLists[u].begin(); i != adjLists[u].end(); ++i)
+                if (!visited[*i])
+                    printAllPathsUtil(*i, d, visited, path, path_index);
+        }
+        path_index--;
+        visited[u] = false;
     }
 
     int get_start() {

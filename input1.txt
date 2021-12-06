@@ -1,7 +1,9 @@
-dc = 4
-start point = 0
-Graph[4]: 
+dc = 9
+start point = 2
+Graph[6]:
 0 : 1 2 3
 1 : 0 2
-2 : 0 3
+2 : 3 4
 3 : 2
+4 : 2 5
+5 : 4
