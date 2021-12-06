@@ -16,7 +16,7 @@ class Graph
     int start;
     int dc;
 
-    vector<int> flag; // (0, 1, 2)
+    vector<int> flag; // 0, 1, 2
     vector<int> cycles;
     int cycles_counter = 0;
 
@@ -79,53 +79,25 @@ public:
         return os;
     }
 
-    void retrieve(int curr) {
-        for (auto u : adjLists[curr]) {
-            if (u == start) {
-                cout << u;
-                return;
-            }
-        }
-        if (flag[curr] == 1) {
-            cout << curr;
-            retrieve(curr);
-            return;
-        }
-    }
-
     void find_cycles(int curr) {
-        cycles.push_back(curr);
-        cout << "\n Entered " << curr;
+        std::cout << "\n Entered " << curr;
         flag[curr] = 1;
         for (auto u : adjLists[curr]) {
-            if (flag[u] == 0) {
+            if (flag[u] == 1)
+                std::cout << "\n I FOUND IT with " << u;
+
+            if (flag[u] == 0)
                 find_cycles(u);
-            }
-            if (flag[u] == 1) {
-                cout << "\n  " << ++cycles_counter << ". ";
-                for (int i : cycles)
-                    cout << i;
 
-                cout << u;
-                if (u != start) {
-                    retrieve(u);
-                }
-            }
-            for (int i : cycles)
-                i = 0;
-
-            if (curr == start) {
-                cout << "\n Clearing flags " << curr;
-                cycles.clear();
-                cycles.push_back(start);
-
+            if (curr == get_start()) {
+                std::cout << "\n\n Resetting flags \n";
                 for (int i = 0; i < flag.size(); i++)
                     flag[i] = 0;
-                flag[0] = 1;
+                flag[start] = 1;
             }
         }
-        cout << "\n Blacklisted " << curr;
-        flag[curr] = 3;
+        std::cout << "\n Closed " << curr;
+        flag[curr] = 2;
     }
 
     int get_start() {
